@@ -75,6 +75,9 @@ void KEngineOpenGL::SpriteRenderer::Init( int width, int height )
 {
     assert(!mInitialized);
     //TODO:  initialize OpenGL stuff
+    
+    glEnable(GL_BLEND);
+    
     mWidth = width;
     mHeight = height;
     
@@ -124,6 +127,7 @@ void KEngineOpenGL::SpriteRenderer::Render() const
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     CHECK_GL_ERROR();
     
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); // For rendering transparent stuff
     for (SpriteGraphic * graphic : mRenderList)
     {
         
@@ -141,6 +145,7 @@ void KEngineOpenGL::SpriteRenderer::Render() const
         
         glBindVertexArray(sprite->vertexArrayObject);
 
+        
         glDrawElements(GL_TRIANGLES, sprite->indexCount, GL_UNSIGNED_SHORT, 0);
         CHECK_GL_ERROR();
     }
