@@ -8,7 +8,13 @@
 
 #pragma once
 
+#if TARGET_OS_IPHONE
 #include <OpenGLES/gltypes.h>
+#else #ifdef WIN32
+#include <Windows.h>
+#include <gl/GL.h>
+#endif
+
 #include "StringHash.h"
 #include <map>
 #include <string>

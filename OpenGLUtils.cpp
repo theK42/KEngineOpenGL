@@ -6,8 +6,16 @@
 //  Copyright © 2017 Kelson Hootman. All rights reserved.
 //
 
-#include "OpenGLUtils.h"
+#if TARGET_OS_IPHONE
 #include <OpenGLES/ES3/gl.h>
+#else #ifdef WIN32
+#include <Windows.h>
+#define GLEW_STATIC
+#include "gl/glew.h"
+#include <gl/GL.h>
+#endif
+
+#include "OpenGLUtils.h"
 
 GLuint KEngineOpenGL::UploadModel(const KEngineOpenGL::Vertex* vertices, int numVertices, const GLushort *indices, int numIndices)
 {
@@ -54,4 +62,8 @@ GLuint KEngineOpenGL::UploadIndices(const GLubyte* indices, int numIndices)
     return indexBuffer;
 }
 
+void KEngineOpenGL::InitializeGlew()
+{
+	glewInit();
+}
 

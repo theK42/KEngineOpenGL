@@ -5,12 +5,25 @@
 //  Created by Kelson Hootman on 11/24/17.
 //  Copyright © 2017 Kelson Hootman. All rights reserved.
 //
-#include "SpriteRenderer.h"
-#include <cassert>
+
+#if TARGET_OS_IPHONE
 #include <OpenGLES/ES3/gl.h>
 #include <OpenGLES/ES3/glext.h>
+#else #ifdef WIN32
+#include <Windows.h>
+#define GLEW_STATIC
+#include "gl/glew.h"
+#include <gl/GL.h>
+#endif
+
+#include "SpriteRenderer.h"
+#include <cassert>
+
 #include "OpenGLUtils.h"
 #include "ShaderFactory.h"
+
+#undef near
+#undef far
 
 KEngineOpenGL::SpriteGraphic::SpriteGraphic()
 {
@@ -81,12 +94,12 @@ void KEngineOpenGL::SpriteRenderer::Init( int width, int height )
     mWidth = width;
     mHeight = height;
     
-    float left = 0;
-    float right = width;
-    float top = 0;
-    float bottom = height;
-    float near = -1;
-    float far = 1;
+    float left = 0.0f;
+    float right = (float)width;
+    float top = 0.0f;
+    float bottom = (float)height;
+    float near = -1.0f;
+    float far = 1.0f;
     
     mProjection[0][0] = 2.0f / (right - left);
     mProjection[0][1] = 0.0f;
@@ -105,7 +118,7 @@ void KEngineOpenGL::SpriteRenderer::Init( int width, int height )
     
     mProjection[3][0] = -(right + left  ) / (right - left  );
     mProjection[3][1] = -(top   + bottom) / (top   - bottom);
-    mProjection[3][2] = -(far   + near  ) / (far   - near  );
+    mProjection[3][2] = -(far + near) / (far - near);
     mProjection[3][3] = 1.0f;
     
     mInitialized = true;
@@ -122,7 +135,7 @@ void KEngineOpenGL::SpriteRenderer::Render() const
     assert(mInitialized);
     glViewport(0, 0, mWidth, mHeight);
     CHECK_GL_ERROR();
-    glClearColor(0.0, 0, 0, 1.0);
+    glClearColor(0, 0, 0, 1.0);
     CHECK_GL_ERROR();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     CHECK_GL_ERROR();

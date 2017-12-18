@@ -6,9 +6,17 @@
 //  Copyright © 2017 Kelson Hootman. All rights reserved.
 //
 
+#if TARGET_OS_IPHONE
+#include <OpenGLES/ES3/gl.h>
+#else #ifdef WIN32
+#include <Windows.h>
+#define GLEW_STATIC
+#include "gl/glew.h"
+#include <gl/GL.h>
+#endif
 #include "ShaderFactory.h"
 #include "TextFile.h"
-#include <OpenGLES/ES3/gl.h>
+
 #include <string>
 
 void KEngineOpenGL::ShaderFactory::Init()
@@ -68,7 +76,7 @@ const KEngineOpenGL::ShaderProgram* KEngineOpenGL::ShaderFactory::GetShaderProgr
 GLuint KEngineOpenGL::ShaderFactory::CompileShader(const std::string &shaderFilename, GLenum shaderType)
 {
     KEngineCore::TextFile file;
-    file.LoadFromFile(shaderFilename, "glsl");
+    file.LoadFromFile(shaderFilename, ".glsl");
     GLuint shaderHandle = glCreateShader(shaderType);
     
     const std::string& shaderString = file.GetContents();
