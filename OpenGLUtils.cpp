@@ -6,13 +6,16 @@
 //  Copyright © 2017 Kelson Hootman. All rights reserved.
 //
 
-#if TARGET_OS_IPHONE
-#include <OpenGLES/ES3/gl.h>
-#else #ifdef WIN32
-#include <Windows.h>
-#define GLEW_STATIC
-#include "gl/glew.h"
-#include <gl/GL.h>
+#if __APPLE__
+    #include "TargetConditionals.h"
+    #if TARGET_OS_IPHONE
+        #include <OpenGLES/ES3/gl.h>
+    #endif
+#elif(_WIN32)
+    #include <Windows.h>
+    #define GLEW_STATIC
+    #include "gl/glew.h"
+    #include <gl/GL.h>
 #endif
 
 #include "OpenGLUtils.h"
@@ -61,9 +64,9 @@ GLuint KEngineOpenGL::UploadIndices(const GLubyte* indices, int numIndices)
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, numIndices * sizeof(GLubyte), indices, GL_STATIC_DRAW);
     return indexBuffer;
 }
-
 void KEngineOpenGL::InitializeGlew()
 {
-	glewInit();
+#ifdef GLEW_STATIC
+    glewInit();
+#endif
 }
-

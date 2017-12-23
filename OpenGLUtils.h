@@ -8,12 +8,16 @@
 
 #pragma once
 
+#if __APPLE__
+#include "TargetConditionals.h"
 #if TARGET_OS_IPHONE
 #include <OpenGLES/gltypes.h>
-#else #ifdef WIN32
+#endif
+#elif(_WIN32)
 #include <Windows.h>
 #include <gl/GL.h>
 #endif
+
 
 #define CHECK_GL_ERROR() assert(glGetError() == GL_NO_ERROR);
 

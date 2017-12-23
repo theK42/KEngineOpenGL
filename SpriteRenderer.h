@@ -11,12 +11,15 @@
 #include <list>
 #include "Transform2D.h"
 #include "Renderer2D.h"
-#if TARGET_OS_IPHONE
-#include <OpenGLES/gltypes.h>
-#else #ifdef WIN32
-#include <Windows.h>
-#include <gl/GL.h>
+
+
+#if __APPLE__
+    #include <OpenGLES/gltypes.h>
+#elif _WIN32
+    #include <Windows.h>
+    #include <gl/GL.h>
 #endif
+
 
 namespace KEngineOpenGL
 {
