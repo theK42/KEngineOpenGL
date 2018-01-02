@@ -11,6 +11,7 @@
 #include <list>
 #include "Transform2D.h"
 #include "Renderer2D.h"
+#include "StringHash.h"
 
 
 #if __APPLE__
@@ -34,6 +35,8 @@ namespace KEngineOpenGL
         GLint indexBuffer;
         GLuint vertexArrayObject;
         int indexCount;
+		GLuint texture;
+		
         /*
          shader name
         vertexShader name for regeneration

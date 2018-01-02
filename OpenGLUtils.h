@@ -19,7 +19,7 @@
 #endif
 
 
-#define CHECK_GL_ERROR() assert(glGetError() == GL_NO_ERROR);
+#define CHECK_GL_ERROR() CheckGLError();
 
 namespace KEngineOpenGL {
     

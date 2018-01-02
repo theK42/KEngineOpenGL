@@ -116,11 +116,13 @@
     <ClCompile Include="OpenGLUtils.cpp" />
     <ClCompile Include="ShaderFactory.cpp" />
     <ClCompile Include="SpriteRenderer.cpp" />
+    <ClCompile Include="TextureFactory.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="OpenGLUtils.h" />
     <ClInclude Include="ShaderFactory.h" />
     <ClInclude Include="SpriteRenderer.h" />
+    <ClInclude Include="TextureFactory.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\KEngine2D\KEngine2D.vcxproj">
@@ -128,6 +130,9 @@
     </ProjectReference>
     <ProjectReference Include="glew-2.1.0\build\vc12\glew_static.vcxproj">
       <Project>{664e6f0d-6784-4760-9565-d54f8eb1edf4}</Project>
+    </ProjectReference>
+    <ProjectReference Include="SOIL\SOIL.vcxproj">
+      <Project>{c32fb2b4-500c-43cd-a099-eecce079d3f1}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

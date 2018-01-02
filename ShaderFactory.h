@@ -17,17 +17,21 @@
 
 #include "StringHash.h"
 #include <map>
+#include <vector>
 #include <string>
 
 namespace KEngineOpenGL {
+
+
     struct ShaderProgram
     {
         GLuint programHandle;
         GLint positionAttribute;
         GLint colorAttribute;
         GLint textureAttribute;
-        GLuint projectionMatrixUniform;
-        GLuint modelMatrixUniform;
+        GLint projectionMatrixUniform;
+        GLint modelMatrixUniform;
+		GLint textureUniform;
     };
     
     class ShaderFactory

@@ -17,6 +17,7 @@
     #include "gl/glew.h"
     #include <gl/GL.h>
 #endif
+#include <assert.h>
 
 #include "OpenGLUtils.h"
 
@@ -64,6 +65,19 @@ GLuint KEngineOpenGL::UploadIndices(const GLubyte* indices, int numIndices)
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, numIndices * sizeof(GLubyte), indices, GL_STATIC_DRAW);
     return indexBuffer;
 }
+
+void KEngineOpenGL::CheckGLError()
+{
+	GLenum errCode;
+	const GLubyte *errString;
+	if ((errCode = glGetError()) != GL_NO_ERROR)
+	{
+		errString = gluErrorString(errCode);
+		//Log(errString)
+		assert(false);
+	}
+}
+
 void KEngineOpenGL::InitializeGlew()
 {
 #ifdef GLEW_STATIC

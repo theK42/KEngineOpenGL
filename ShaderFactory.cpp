@@ -6,6 +6,7 @@
 //  Copyright © 2017 Kelson Hootman. All rights reserved.
 //
 
+
 #if __APPLE__
     #include "TargetConditionals.h"
     #if TARGET_OS_IPHONE
@@ -19,7 +20,9 @@
 #endif
 #include "ShaderFactory.h"
 #include "TextFile.h"
+#include "OpenGLUtils.h"
 
+#include <assert.h>
 #include <string>
 
 void KEngineOpenGL::ShaderFactory::Init()
@@ -28,7 +31,8 @@ void KEngineOpenGL::ShaderFactory::Init()
     mFragmentShaders.clear();
     mShaderPrograms.clear();
 }
-void KEngineOpenGL::ShaderFactory::CreateShaderProgram(KEngineCore::StringHash name, const std::string& vertexShaderFilename, const std::string& fragmentShaderFilename)
+
+void KEngineOpenGL::ShaderFactory::CreateShaderProgram(KEngineCore::StringHash name, const std::string & vertexShaderFilename, const std::string & fragmentShaderFilename)
 {
     KEngineCore::StringHash vertexHash(vertexShaderFilename.c_str());
     KEngineCore::StringHash fragmentHash(fragmentShaderFilename.c_str());
@@ -45,9 +49,9 @@ void KEngineOpenGL::ShaderFactory::CreateShaderProgram(KEngineCore::StringHash n
     glAttachShader(programHandle, mVertexShaders[vertexHash]);
     glAttachShader(programHandle, mFragmentShaders[fragmentHash]);
     
-    glBindAttribLocation(programHandle, 0, "Position");
+    /*glBindAttribLocation(programHandle, 0, "Position");
     glBindAttribLocation(programHandle, 1, "VertexColor");
-    glBindAttribLocation(programHandle, 2, "TextureCoordinates");
+    glBindAttribLocation(programHandle, 2, "TextureCoordinates");*/
     
     glLinkProgram(programHandle);
     GLint linkSuccess;
@@ -68,11 +72,13 @@ void KEngineOpenGL::ShaderFactory::CreateShaderProgram(KEngineCore::StringHash n
     program.textureAttribute = glGetAttribLocation(programHandle, "TextureCoordinates");
     program.projectionMatrixUniform = glGetUniformLocation(programHandle, "Projection");
     program.modelMatrixUniform = glGetUniformLocation(programHandle, "Model");
-
+	program.textureUniform = glGetUniformLocation(programHandle, "Texture");
+	CheckGLError();
 }
 
 const KEngineOpenGL::ShaderProgram* KEngineOpenGL::ShaderFactory::GetShaderProgram(KEngineCore::StringHash name)
 {
+	assert(mShaderPrograms.find(name) != mShaderPrograms.end());
     return &mShaderPrograms[name];
 }
 

@@ -91,7 +91,6 @@ KEngineOpenGL::SpriteRenderer::~SpriteRenderer()
 void KEngineOpenGL::SpriteRenderer::Init( int width, int height )
 {
     assert(!mInitialized);
-    //TODO:  initialize OpenGL stuff
     
     glEnable(GL_BLEND);
     
@@ -161,8 +160,17 @@ void KEngineOpenGL::SpriteRenderer::Render() const
         CHECK_GL_ERROR();
         
         glBindVertexArray(sprite->vertexArrayObject);
-
-        
+		CHECK_GL_ERROR();
+		
+		if (sprite->texture != 0 || shaderProgram->textureUniform != -1) {
+			assert(sprite->texture != 0 && shaderProgram->textureUniform != -1);
+			glActiveTexture(GL_TEXTURE0);
+			CHECK_GL_ERROR();
+			glBindTexture(GL_TEXTURE_2D, sprite->texture);
+			CHECK_GL_ERROR();
+			glUniform1i(shaderProgram->textureUniform, 0);
+			CHECK_GL_ERROR();
+		}
         glDrawElements(GL_TRIANGLES, sprite->indexCount, GL_UNSIGNED_SHORT, 0);
         CHECK_GL_ERROR();
     }
