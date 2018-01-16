@@ -18,6 +18,7 @@
     #include <gl/GL.h>
 #endif
 #include <assert.h>
+#include <iostream>
 
 #include "OpenGLUtils.h"
 
@@ -68,13 +69,24 @@ GLuint KEngineOpenGL::UploadIndices(const GLubyte* indices, int numIndices)
 
 void KEngineOpenGL::CheckGLError()
 {
-	GLenum errCode;
+	GLenum errCode = glGetError();
 	const GLubyte *errString;
-	if ((errCode = glGetError()) != GL_NO_ERROR)
-	{
-		errString = gluErrorString(errCode);
-		//Log(errString)
-		assert(false);
+    if (errCode != GL_NO_ERROR) {
+        while (errCode != GL_NO_ERROR) {
+            std::string error;
+        
+            switch(errCode) {
+                case GL_INVALID_OPERATION:      error="INVALID_OPERATION";      break;
+                case GL_INVALID_ENUM:           error="INVALID_ENUM";           break;
+                case GL_INVALID_VALUE:          error="INVALID_VALUE";          break;
+                case GL_OUT_OF_MEMORY:          error="OUT_OF_MEMORY";          break;
+                case GL_INVALID_FRAMEBUFFER_OPERATION:  error="INVALID_FRAMEBUFFER_OPERATION"; break;
+            }
+        
+            std::cerr << "GL_" << error.c_str() << std::endl;
+            errCode = glGetError();
+        }
+        exit(1);
 	}
 }
 

@@ -10,6 +10,8 @@
 		6851567A1FC954DD003788B5 /* SpriteRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 685155A21FC8E4EF003788B5 /* SpriteRenderer.cpp */; };
 		6851568E1FCBC9F4003788B5 /* OpenGLUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6851568D1FCBC9F4003788B5 /* OpenGLUtils.cpp */; };
 		685156901FCBEADC003788B5 /* ShaderFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6851568F1FCBEADC003788B5 /* ShaderFactory.cpp */; };
+		68921EBC200D825C00A54ABF /* TextureFactory_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 68921EBB200D825C00A54ABF /* TextureFactory_iOS.mm */; };
+		68921EBF200D89C300A54ABF /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68921EBE200D89C300A54ABF /* GLKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -32,6 +34,9 @@
 		685156881FCBA127003788B5 /* ShaderFactory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShaderFactory.h; sourceTree = "<group>"; };
 		6851568D1FCBC9F4003788B5 /* OpenGLUtils.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = OpenGLUtils.cpp; sourceTree = "<group>"; };
 		6851568F1FCBEADC003788B5 /* ShaderFactory.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ShaderFactory.cpp; sourceTree = "<group>"; };
+		68921E8C200C818100A54ABF /* TextureFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextureFactory.h; sourceTree = "<group>"; };
+		68921EBB200D825C00A54ABF /* TextureFactory_iOS.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = TextureFactory_iOS.mm; sourceTree = "<group>"; };
+		68921EBE200D89C300A54ABF /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS11.2.sdk/System/Library/Frameworks/GLKit.framework; sourceTree = DEVELOPER_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -39,6 +44,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				68921EBF200D89C300A54ABF /* GLKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -48,6 +54,8 @@
 		6851558F1FC8BD4A003788B5 = {
 			isa = PBXGroup;
 			children = (
+				68921EBB200D825C00A54ABF /* TextureFactory_iOS.mm */,
+				68921E8C200C818100A54ABF /* TextureFactory.h */,
 				685156881FCBA127003788B5 /* ShaderFactory.h */,
 				6851568F1FCBEADC003788B5 /* ShaderFactory.cpp */,
 				685156871FCB972C003788B5 /* OpenGLUtils.h */,
@@ -55,6 +63,7 @@
 				685155A21FC8E4EF003788B5 /* SpriteRenderer.cpp */,
 				685155A31FC8E4EF003788B5 /* SpriteRenderer.h */,
 				685155991FC8BD4A003788B5 /* Products */,
+				68921EBD200D89C200A54ABF /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -64,6 +73,14 @@
 				685155AA1FC8FBD4003788B5 /* libKEngineOpenGL.a */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		68921EBD200D89C200A54ABF /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				68921EBE200D89C300A54ABF /* GLKit.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -126,6 +143,7 @@
 				6851568E1FCBC9F4003788B5 /* OpenGLUtils.cpp in Sources */,
 				685156901FCBEADC003788B5 /* ShaderFactory.cpp in Sources */,
 				6851567A1FC954DD003788B5 /* SpriteRenderer.cpp in Sources */,
+				68921EBC200D825C00A54ABF /* TextureFactory_iOS.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -10,7 +10,7 @@
 
 #if TARGET_OS_IPHONE
 #include <OpenGLES/gltypes.h>
-#else #ifdef WIN32
+#elif defined(WIN32)
 #include <Windows.h>
 #include <gl/GL.h>
 #endif

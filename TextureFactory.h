@@ -3,11 +3,14 @@
 #include <string>
 #include <map>
 
-#if TARGET_OS_IPHONE
-#include <OpenGLES/gltypes.h>
-#else #ifdef WIN32
-#include <Windows.h>
-#include <gl/GL.h>
+#if __APPLE__
+    #include "TargetConditionals.h"
+    #if TARGET_OS_IPHONE
+        #include <OpenGLES/gltypes.h>
+    #endif
+#elif defined(WIN32)
+    #include <Windows.h>
+    #include <gl/GL.h>
 #endif
 
 namespace KEngineOpenGL {
