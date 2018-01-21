@@ -49,9 +49,9 @@ void KEngineOpenGL::ShaderFactory::CreateShaderProgram(KEngineCore::StringHash n
     glAttachShader(programHandle, mVertexShaders[vertexHash]);
     glAttachShader(programHandle, mFragmentShaders[fragmentHash]);
     
-    /*glBindAttribLocation(programHandle, 0, "Position");
+    glBindAttribLocation(programHandle, 0, "Position");
     glBindAttribLocation(programHandle, 1, "VertexColor");
-    glBindAttribLocation(programHandle, 2, "TextureCoordinates");*/
+    glBindAttribLocation(programHandle, 2, "TextureCoordinates");
     
     glLinkProgram(programHandle);
     GLint linkSuccess;
