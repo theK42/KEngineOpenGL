@@ -61,6 +61,7 @@ void KEngineOpenGL::ShaderFactory::CreateShaderProgram(KEngineCore::StringHash n
         glGetProgramInfoLog(programHandle, sizeof(messages), 0, &messages[0]);
         std::string messageString = messages;
         //Log(messageString);
+        assert(false);
         exit(1);
     }
     ShaderProgram &program = mShaderPrograms[name];
@@ -100,6 +101,7 @@ GLuint KEngineOpenGL::ShaderFactory::CompileShader(const std::string &shaderFile
         glGetShaderInfoLog(shaderHandle, sizeof(messages), 0, &messages[0]);
         std::string messageString = messages;
         //Log(messageString);
+        assert(false);
         exit(1);
     }
     return shaderHandle;
