@@ -14,8 +14,7 @@
     #endif
 #elif _WIN32
     #include <Windows.h>
-    #define GLEW_STATIC
-    #include "gl/glew.h"
+    #include "glad/glad.h"
     #include <gl/GL.h>
 #endif
 #include "ShaderFactory.h"
@@ -24,6 +23,7 @@
 
 #include <assert.h>
 #include <string>
+#include <iostream>
 
 void KEngineOpenGL::ShaderFactory::Init()
 {
@@ -100,7 +100,7 @@ GLuint KEngineOpenGL::ShaderFactory::CompileShader(const std::string &shaderFile
         GLchar messages[256];
         glGetShaderInfoLog(shaderHandle, sizeof(messages), 0, &messages[0]);
         std::string messageString = messages;
-        //Log(messageString);
+        std::cerr << messageString << std::endl;
         assert(false);
         exit(1);
     }

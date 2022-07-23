@@ -13,8 +13,7 @@
     #endif
 #elif(_WIN32)
     #include <Windows.h>
-    #define GLEW_STATIC
-    #include "gl/glew.h"
+    #include "glad/glad.h"
     #include <gl/GL.h>
 #endif
 #include <assert.h>
@@ -90,9 +89,7 @@ void KEngineOpenGL::CheckGLError()
 	}
 }
 
-void KEngineOpenGL::InitializeGlew()
+void KEngineOpenGL::InitializeGlad()
 {
-#ifdef GLEW_STATIC
-    glewInit();
-#endif
+    gladLoadGL();
 }

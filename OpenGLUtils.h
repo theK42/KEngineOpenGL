@@ -34,7 +34,7 @@ namespace KEngineOpenGL {
     GLuint UploadIndices(const GLubyte* indices, int numIndices);
     void CheckGLError();
 
-	void InitializeGlew();
+	void InitializeGlad();
     
     
 }

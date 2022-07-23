@@ -15,8 +15,7 @@
     #endif
 #elif _WIN32
     #include <Windows.h>
-    #define GLEW_STATIC
-    #include "gl/glew.h"
+    #include "glad/glad.h"
     #include <gl/GL.h>
 #endif
 
