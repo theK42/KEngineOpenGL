@@ -15,6 +15,7 @@
 #endif
 #elif(_WIN32)
 #include <Windows.h>
+#include "glad/glad.h"
 #include <gl/GL.h>
 #endif
 
@@ -34,7 +35,7 @@ namespace KEngineOpenGL {
     GLuint UploadIndices(const GLubyte* indices, int numIndices);
     void CheckGLError();
 
-	void InitializeGlad();
+	void InitializeGlad(GLADloadproc loadProc);
     
     
 }

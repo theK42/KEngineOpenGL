@@ -18,6 +18,7 @@
     #include <OpenGLES/gltypes.h>
 #elif _WIN32
     #include <Windows.h>
+    #include <glad/glad.h>
     #include <gl/GL.h>
 #endif
 

@@ -89,7 +89,12 @@ void KEngineOpenGL::CheckGLError()
 	}
 }
 
-void KEngineOpenGL::InitializeGlad()
+void KEngineOpenGL::InitializeGlad(GLADloadproc loadProc)
 {
-    gladLoadGL();
+    if (loadProc) {
+        gladLoadGLLoader(loadProc);
+    }
+    else {
+        gladLoadGL();
+    }
 }
