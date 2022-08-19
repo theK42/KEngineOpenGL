@@ -9,8 +9,9 @@
         #include <OpenGLES/gltypes.h>
     #endif
 #elif defined(_WIN32)
-    #include <Windows.h>
-    #include <gl/GL.h>
+	#include <glad/glad.h>
+#else
+	#include <glad/glad.h>
 #endif
 
 namespace KEngineOpenGL {

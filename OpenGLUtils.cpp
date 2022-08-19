@@ -5,21 +5,9 @@
 //  Created by Kelson Hootman on 11/26/17.
 //  Copyright © 2017 Kelson Hootman. All rights reserved.
 //
-
-#if __APPLE__
-    #include "TargetConditionals.h"
-    #if TARGET_OS_IPHONE
-        #include <OpenGLES/ES3/gl.h>
-    #endif
-#elif(_WIN32)
-    #include <Windows.h>
-    #include "glad/glad.h"
-    #include <gl/GL.h>
-#endif
+#include "OpenGLUtils.h"
 #include <assert.h>
 #include <iostream>
-
-#include "OpenGLUtils.h"
 
 GLuint KEngineOpenGL::UploadModel(const KEngineOpenGL::Vertex* vertices, int numVertices, const GLushort *indices, int numIndices)
 {

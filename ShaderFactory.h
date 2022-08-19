@@ -11,8 +11,9 @@
 #if TARGET_OS_IPHONE
 #include <OpenGLES/gltypes.h>
 #elif defined(WIN32)
-#include <Windows.h>
-#include <gl/GL.h>
+#include <glad/glad.h>
+#else
+#include <glad/glad.h>
 #endif
 
 #include "StringHash.h"

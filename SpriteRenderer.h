@@ -17,9 +17,9 @@
 #if __APPLE__
     #include <OpenGLES/gltypes.h>
 #elif _WIN32
-    #include <Windows.h>
     #include <glad/glad.h>
-    #include <gl/GL.h>
+#else
+    #include <glad/glad.h>
 #endif
 
 
