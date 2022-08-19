@@ -60,9 +60,9 @@ namespace KEngineOpenGL
         KEngine2D::Transform const * GetTransform() const;
         
     protected:
-        Sprite const *                  mSprite;
-        KEngine2D::Transform const *    mTransform;
-        SpriteRenderer *                mRenderer;
+        Sprite const*                   mSprite{ nullptr };
+        KEngine2D::Transform const *    mTransform{ nullptr };
+        SpriteRenderer*                 mRenderer{ nullptr };
     };
     
     class SpriteRenderer : public KEngine2D::Renderer
@@ -80,7 +80,7 @@ namespace KEngineOpenGL
     protected:
         
         std::list<SpriteGraphic *>    mRenderList;
-        bool                          mInitialized;
+        bool                          mInitialized{ false };
         int                           mWidth;
         int                           mHeight;
         float                         mProjection[4][4];
