@@ -33,6 +33,9 @@ GLuint KEngineOpenGL::UploadModel(const KEngineOpenGL::Vertex* vertices, int num
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, numIndices * sizeof(GLushort), indices, GL_STATIC_DRAW);
     
     glBindVertexArray(0);
+
+    glDeleteBuffers(2, vbo);
+
     return vao;
 }
 
@@ -76,6 +79,18 @@ void KEngineOpenGL::CheckGLError()
         exit(1);
 	}
 }
+
+void KEngineOpenGL::DeleteVAO(GLuint vaoId)
+{
+    glDeleteVertexArrays(1, &vaoId);
+}
+
+void KEngineOpenGL::DeleteBuffer(GLuint bufferId)
+{
+    glDeleteBuffers(1, &bufferId);
+}
+
+
 
 void KEngineOpenGL::InitializeGlad(GLADloadproc loadProc)
 {

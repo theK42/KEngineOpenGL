@@ -35,6 +35,9 @@ namespace KEngineOpenGL {
     GLuint UploadIndices(const GLubyte* indices, int numIndices);
     void CheckGLError();
 
+    void DeleteVAO(GLuint vaoId);
+    void DeleteBuffer(GLuint bufferId);
+
 	void InitializeGlad(GLADloadproc loadProc);
     
     
