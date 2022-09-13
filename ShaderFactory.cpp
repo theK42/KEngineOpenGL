@@ -30,10 +30,10 @@ void KEngineOpenGL::ShaderFactory::Init()
     mShaderPrograms.clear();
 }
 
-void KEngineOpenGL::ShaderFactory::CreateShaderProgram(KEngineCore::StringHash name, const std::string & vertexShaderFilename, const std::string & fragmentShaderFilename)
+void KEngineOpenGL::ShaderFactory::CreateShaderProgram(KEngineCore::StringHash name, const std::string_view & vertexShaderFilename, const std::string_view & fragmentShaderFilename)
 {
-    KEngineCore::StringHash vertexHash(vertexShaderFilename.c_str());
-    KEngineCore::StringHash fragmentHash(fragmentShaderFilename.c_str());
+    KEngineCore::StringHash vertexHash(vertexShaderFilename);
+    KEngineCore::StringHash fragmentHash(fragmentShaderFilename);
     
     if (mVertexShaders.find(vertexHash) == mVertexShaders.end()) {
         mVertexShaders[vertexHash] = CompileShader(vertexShaderFilename, GL_VERTEX_SHADER);
@@ -81,7 +81,7 @@ const KEngineOpenGL::ShaderProgram* KEngineOpenGL::ShaderFactory::GetShaderProgr
     return &mShaderPrograms[name];
 }
 
-GLuint KEngineOpenGL::ShaderFactory::CompileShader(const std::string &shaderFilename, GLenum shaderType)
+GLuint KEngineOpenGL::ShaderFactory::CompileShader(const std::string_view &shaderFilename, GLenum shaderType)
 {
     KEngineCore::TextFile file;
     file.LoadFromFile(shaderFilename, ".glsl");

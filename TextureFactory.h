@@ -14,12 +14,21 @@
 	#include <glad/glad.h>
 #endif
 
+namespace KEngineCore {
+	class DataTree;
+}
+
 namespace KEngineOpenGL {
 	class TextureFactory
 	{
 	public:
+		TextureFactory();
+		~TextureFactory();
 		void Init();
-		void CreateTexture(KEngineCore::StringHash name, const std::string& textureFilename);
+		void Deinit();
+
+		void CreateTextures(KEngineCore::DataTree* textureData);
+		void CreateTexture(KEngineCore::StringHash name, const std::string_view& textureFilename);
 		const GLuint GetTexture(KEngineCore::StringHash name);
 	private:
 		std::map<KEngineCore::StringHash, GLuint> mTextures;

@@ -39,11 +39,11 @@ namespace KEngineOpenGL {
     {
     public:
         void Init();
-        void CreateShaderProgram(KEngineCore::StringHash name, const std::string& vertexShaderFilename, const std::string& fragmentShaderFilename);
+        void CreateShaderProgram(KEngineCore::StringHash name, const std::string_view& vertexShaderFilename, const std::string_view& fragmentShaderFilename);
         const KEngineOpenGL::ShaderProgram * GetShaderProgram(KEngineCore::StringHash name);
         
     private:
-        GLuint CompileShader(const std::string& shaderFilename, GLenum shaderType);
+        GLuint CompileShader(const std::string_view& shaderFilename, GLenum shaderType);
         
         std::map<KEngineCore::StringHash, GLuint> mVertexShaders;
         std::map<KEngineCore::StringHash, GLuint> mFragmentShaders;
