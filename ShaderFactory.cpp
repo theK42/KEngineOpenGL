@@ -11,8 +11,10 @@
     #include "TargetConditionals.h"
     #if TARGET_OS_IPHONE
         #include <OpenGLES/ES3/gl.h>
+    #else
+        #include <glad/glad.h>
     #endif
-#elif _WIN32
+#elif(_WIN32)
     #include "glad/glad.h"
 #endif
 #include "ShaderFactory.h"

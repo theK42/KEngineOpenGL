@@ -12,6 +12,8 @@
     #if TARGET_OS_IPHONE
         #include <OpenGLES/ES3/gl.h>
         #include <OpenGLES/ES3/glext.h>
+    #else
+        #include <glad/glad.h>
     #endif
 #elif _WIN32
     #include "glad/glad.h"

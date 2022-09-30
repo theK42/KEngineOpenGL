@@ -8,9 +8,15 @@
 
 #pragma once
 
-#if TARGET_OS_IPHONE
-#include <OpenGLES/gltypes.h>
-#elif defined(WIN32)
+
+#if __APPLE__
+    #include "TargetConditionals.h"
+    #if TARGET_OS_IPHONE
+        #include <OpenGLES/gltypes.h>
+    #else
+        #include <glad/glad.h>
+    #endif
+#elif(_WIN32)
 #include <glad/glad.h>
 #else
 #include <glad/glad.h>

@@ -7,6 +7,8 @@
     #include "TargetConditionals.h"
     #if TARGET_OS_IPHONE
         #include <OpenGLES/gltypes.h>
+    #else
+        #include <glad/glad.h>
     #endif
 #elif defined(_WIN32)
 	#include <glad/glad.h>

@@ -1,7 +1,17 @@
 #include "TextureFactory.h"
 #include "DataTree.h"
-#include "SOIL\SOIL.h"
+#include "SOIL/SOIL.h"
 #include <assert.h>
+#include "OpenGLUtils.h"
+
+#if __APPLE__
+    #include "TargetConditionals.h"
+    #if TARGET_OS_IPHONE
+        //?
+    #else
+        #include <OpenGL/gl.h>
+    #endif
+#endif
 
 KEngineOpenGL::TextureFactory::TextureFactory()
 {

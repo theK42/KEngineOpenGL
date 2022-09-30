@@ -73,7 +73,7 @@ void KEngineOpenGL::CheckGLError()
                 case GL_INVALID_FRAMEBUFFER_OPERATION:  error="INVALID_FRAMEBUFFER_OPERATION"; break;
             }
         
-            std::cerr << "GL_" << error.c_str() << std::endl;
+            std::cerr << "CheckGLError -- GL_" << error.c_str() << std::endl;
             errCode = glGetError();
         }
         exit(1);
