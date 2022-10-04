@@ -97,6 +97,7 @@ GLuint KEngineOpenGL::ShaderFactory::CompileShader(const std::string_view &shade
     GLint compileSuccess;
     glGetShaderiv(shaderHandle, GL_COMPILE_STATUS, &compileSuccess);
     if (compileSuccess == GL_FALSE) {
+        std::cerr << "Failed to compile shader: " << shaderFilename << std::endl;
         GLchar messages[256];
         glGetShaderInfoLog(shaderHandle, sizeof(messages), 0, &messages[0]);
         std::string messageString = messages;
