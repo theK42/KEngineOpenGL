@@ -180,8 +180,8 @@ void KEngineOpenGL::TextRenderer::Resize(int newBufferSize)
 
 	for (unsigned short indexOffset = mIndexBufferVector.size(); indexOffset < newBufferSize * 4; indexOffset += 4)
 	{
-		std::array<GLushort, 6> glyphIndices = { indexOffset + 0, indexOffset + 1, indexOffset + 2,
-			indexOffset + 2, indexOffset + 3, indexOffset + 0 };
+		std::array<GLushort, 6> glyphIndices = { (unsigned short)(indexOffset + 0), (unsigned short)(indexOffset + 1), (unsigned short)(indexOffset + 2),
+			(unsigned short)(indexOffset + 2), (unsigned short)(indexOffset + 3), (unsigned short)(indexOffset + 0) };
 		mIndexBufferVector.insert(mIndexBufferVector.end(), glyphIndices.begin(), glyphIndices.end());
 	}
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mBuffers[1]);
