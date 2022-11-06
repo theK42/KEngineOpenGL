@@ -45,9 +45,9 @@ void KEngineOpenGL::TextSprite::Init(int width, int height, const KEngineOpenGL:
 
 	
 	const KEngineOpenGL::Vertex Vertices[] = {
-		{ { width, 0.f, 0.f },{ 1.f, 1.f, 1.f, 1.f },{ 1.f, 0.f } },
-		{ { width, height, 0.f },{ 1.f, 1.f, 1.f, 1.f },{ 1.f,1.f } },
-		{ { 0.f, height, 0.f },{ 1.f, 1.f, 1.f, 1.f },{ 0.f,1.f } },
+		{ { (float)width, 0.f, 0.f },{ 1.f, 1.f, 1.f, 1.f },{ 1.f, 0.f } },
+		{ { (float)width, (float)height, 0.f },{ 1.f, 1.f, 1.f, 1.f },{ 1.f,1.f } },
+		{ { 0.f, (float)height, 0.f },{ 1.f, 1.f, 1.f, 1.f },{ 0.f,1.f } },
 		{ { 0.f, 0.f, 0.f },{ 1.f, 1.f, 1.f, 1.f },{ 0.f,0.f } }
 	};
 
@@ -178,7 +178,7 @@ void KEngineOpenGL::TextRenderer::Resize(int newBufferSize)
 
 	mVertexBufferVector.resize(newBufferSize * 4);
 
-	for (int indexOffset = mIndexBufferVector.size(); indexOffset < newBufferSize * 4; indexOffset += 4)
+	for (unsigned short indexOffset = mIndexBufferVector.size(); indexOffset < newBufferSize * 4; indexOffset += 4)
 	{
 		std::array<GLushort, 6> glyphIndices = { indexOffset + 0, indexOffset + 1, indexOffset + 2,
 			indexOffset + 2, indexOffset + 3, indexOffset + 0 };
