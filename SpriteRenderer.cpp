@@ -22,6 +22,7 @@
 #endif
 
 #include "SpriteRenderer.h"
+#include "Tweening.h"
 #include <cassert>
 
 #include "OpenGLUtils.h"
@@ -29,6 +30,8 @@
 
 #undef near
 #undef far
+
+const char KEngineOpenGL::SpriteGraphic::MetaName[] = "KEngineOpenGL.SpriteGraphic";
 
 KEngineOpenGL::SpriteGraphic::SpriteGraphic()
 {
@@ -48,6 +51,7 @@ void KEngineOpenGL::SpriteGraphic::Init( SpriteRenderer * renderer, Sprite const
     mRenderer = renderer;
     mSprite = sprite;
     mTransform = transform;
+    mAlpha = 1.0f;
     renderer->AddToRenderList(this);
 }
 
@@ -77,6 +81,16 @@ KEngine2D::Transform const * KEngineOpenGL::SpriteGraphic::GetTransform() const
 {
     assert(mTransform != nullptr);
     return mTransform;
+}
+
+float KEngineOpenGL::SpriteGraphic::GetAlpha() const
+{
+    return mAlpha;
+}
+
+void KEngineOpenGL::SpriteGraphic::SetAlpha(float alpha)
+{
+    mAlpha = alpha;
 }
 
 KEngineOpenGL::SpriteRenderer::SpriteRenderer()
@@ -172,6 +186,12 @@ void KEngineOpenGL::SpriteRenderer::Render() const
 			glUniform1i(shaderProgram->textureUniform, 0);
 			CHECK_GL_ERROR();
 		}
+
+        if (shaderProgram->alphaUniform != -1)
+        {
+            glUniform1f(shaderProgram->alphaUniform, graphic->GetAlpha());
+        }
+
         glDrawElements(GL_TRIANGLES, sprite->indexCount, GL_UNSIGNED_SHORT, 0);
         CHECK_GL_ERROR();
     }
@@ -197,3 +217,80 @@ int KEngineOpenGL::SpriteRenderer::GetHeight() const {
     return mHeight;
 }
 
+KEngineOpenGL::SpriteLibrary::SpriteLibrary()
+{
+}
+
+KEngineOpenGL::SpriteLibrary::~SpriteLibrary()
+{
+    Deinit();
+}
+
+void KEngineOpenGL::SpriteLibrary::Init(KEngineCore::LuaScheduler* scheduler, KEngineCore::TweenSystem* tweenSystem)
+{
+    assert(mScheduler == nullptr);
+    mScheduler = scheduler;
+    mTweenSystem = tweenSystem;
+
+    RegisterLibrary(scheduler->GetMainState());
+}
+
+void KEngineOpenGL::SpriteLibrary::Deinit()
+{
+    mScheduler = nullptr;
+    mTweenSystem = nullptr;
+}
+
+void KEngineOpenGL::SpriteLibrary::RegisterLibrary(lua_State* luaState, char const* name)
+{
+    mSpriteLuaWrapping.Init(SpriteGraphic::MetaName);
+    auto luaopen_sprites = [](lua_State* luaState) {
+
+
+        auto createFadeOut = [](lua_State* luaState) {
+            SpriteLibrary* spriteLib = (SpriteLibrary*)lua_touserdata(luaState, lua_upvalueindex(1));
+            KEngineCore::LuaScheduler* scheduler = spriteLib->mScheduler;
+            SpriteGraphic* spriteGraphic = spriteLib->mSpriteLuaWrapping.Unwrap(luaState, 1);
+            
+            KEngineCore::TweenTo<float>* tween = new (lua_newuserdata(luaState, sizeof(KEngineCore::TweenTo<float>))) KEngineCore::TweenTo<float>;
+            luaL_getmetatable(luaState, KEngineCore::Tween::MetaName);
+            lua_setmetatable(luaState, -2);
+
+            tween->Init(spriteLib->mTweenSystem, &spriteGraphic->mAlpha, 0.0f);
+            return 1;
+        };
+
+        auto createFadeIn = [](lua_State* luaState) {
+            SpriteLibrary* spriteLib = (SpriteLibrary*)lua_touserdata(luaState, lua_upvalueindex(1));
+            KEngineCore::LuaScheduler* scheduler = spriteLib->mScheduler;
+            SpriteGraphic* spriteGraphic = spriteLib->mSpriteLuaWrapping.Unwrap(luaState, 1);
+
+            KEngineCore::TweenTo<float>* tween = new (lua_newuserdata(luaState, sizeof(KEngineCore::TweenTo<float>))) KEngineCore::TweenTo<float>;
+            luaL_getmetatable(luaState, KEngineCore::Tween::MetaName);
+            lua_setmetatable(luaState, -2);
+
+            tween->Init(spriteLib->mTweenSystem, &spriteGraphic->mAlpha, 1.0f);
+            return 1;
+        };
+
+        const luaL_Reg spritesLibrary[] = {
+            {"createFadeOut", createFadeOut},
+            {"createFadeIn", createFadeIn},
+            {nullptr, nullptr}
+        };
+
+        CreateEmptyMetaTableForClass<SpriteGraphic, SpriteGraphic::MetaName>(luaState);
+
+        luaL_newlibtable(luaState, spritesLibrary);
+        lua_pushvalue(luaState, lua_upvalueindex(1));
+        luaL_setfuncs(luaState, spritesLibrary, 1);
+        return 1;
+    };
+
+    PreloadLibrary(luaState, name, luaopen_sprites);
+}
+
+const KEngineCore::LuaWrapping<KEngineOpenGL::SpriteGraphic>& KEngineOpenGL::SpriteLibrary::GetSpriteWrapping() const
+{
+    return mSpriteLuaWrapping;
+}

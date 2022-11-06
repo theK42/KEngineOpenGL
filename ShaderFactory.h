@@ -39,6 +39,7 @@ namespace KEngineOpenGL {
         GLint projectionMatrixUniform;
         GLint modelMatrixUniform;
 		GLint textureUniform;
+        GLint alphaUniform;
     };
     
     class ShaderFactory

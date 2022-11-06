@@ -74,6 +74,7 @@ void KEngineOpenGL::ShaderFactory::CreateShaderProgram(KEngineCore::StringHash n
     program.projectionMatrixUniform = glGetUniformLocation(programHandle, "Projection");
     program.modelMatrixUniform = glGetUniformLocation(programHandle, "Model");
 	program.textureUniform = glGetUniformLocation(programHandle, "Texture");
+    program.alphaUniform = glGetUniformLocation(programHandle, "Alpha");
 	CheckGLError();
 }
 

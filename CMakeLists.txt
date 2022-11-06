@@ -13,6 +13,10 @@ SpriteRenderer.h
 SpriteRenderer.cpp
 TextureFactory.h
 TextureFactory.cpp
+TextRenderer.h
+TextRenderer.cpp
+FontFactory.h
+FontFactory.cpp
 )
 add_subdirectory(SOIL)
 add_subdirectory(glad)
