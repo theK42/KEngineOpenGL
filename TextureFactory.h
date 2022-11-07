@@ -30,7 +30,7 @@ namespace KEngineOpenGL {
 		void Deinit();
 
 		void CreateTextures(KEngineCore::DataTree* textureData);
-		void CreateTexture(KEngineCore::StringHash name, const std::string_view& textureFilename);
+		void CreateTexture(KEngineCore::StringHash name, const std::string_view& textureFilename, bool isPixelArt);
 		const GLuint GetTexture(KEngineCore::StringHash name);
 	private:
 		std::map<KEngineCore::StringHash, GLuint> mTextures;
