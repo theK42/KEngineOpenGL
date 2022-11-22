@@ -44,7 +44,7 @@ KEngineOpenGL::SpriteGraphic::~SpriteGraphic()
     Deinit();
 }
 
-void KEngineOpenGL::SpriteGraphic::Init( SpriteRenderer * renderer, Sprite const * sprite, KEngine2D::Transform const * transform )
+void KEngineOpenGL::SpriteGraphic::Init( SpriteRenderer * renderer, Sprite const * sprite, KEngine2D::Transform const * transform, int layer)
 {
     assert(transform != nullptr);
     assert(renderer != nullptr);
@@ -52,6 +52,7 @@ void KEngineOpenGL::SpriteGraphic::Init( SpriteRenderer * renderer, Sprite const
     mSprite = sprite;
     mTransform = transform;
     mAlpha = 1.0f;
+    mLayer = layer;
     renderer->AddToRenderList(this);
 }
 
@@ -93,6 +94,11 @@ void KEngineOpenGL::SpriteGraphic::SetAlpha(float alpha)
     mAlpha = alpha;
 }
 
+int KEngineOpenGL::SpriteGraphic::GetLayer()
+{
+    return mLayer;
+}
+
 KEngineOpenGL::SpriteRenderer::SpriteRenderer()
 {
     mInitialized = false;
@@ -103,7 +109,7 @@ KEngineOpenGL::SpriteRenderer::~SpriteRenderer()
     Deinit();
 }
 
-void KEngineOpenGL::SpriteRenderer::Init( int width, int height )
+void KEngineOpenGL::SpriteRenderer::Init( int width, int height, int layers)
 {
     assert(!mInitialized);
     
@@ -139,13 +145,15 @@ void KEngineOpenGL::SpriteRenderer::Init( int width, int height )
     mProjection[3][2] = -(far + near) / (far - near);
     mProjection[3][3] = 1.0f;
     
+    mRenderLists.resize(layers);
+
     mInitialized = true;
 }
 
 void KEngineOpenGL::SpriteRenderer::Deinit()
 {
     mInitialized = false;
-    mRenderList.clear();
+    mRenderLists.clear();
 }
 
 void KEngineOpenGL::SpriteRenderer::Render() const
@@ -159,54 +167,57 @@ void KEngineOpenGL::SpriteRenderer::Render() const
     CHECK_GL_ERROR();
     
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); // For rendering transparent stuff
-    for (SpriteGraphic * graphic : mRenderList)
-    {
-        
-        const Sprite * sprite = graphic->GetSprite();
-        const KEngine2D::Matrix& modelMatrix = graphic->GetTransform()->GetAsMatrix();
-        const ShaderProgram * shaderProgram = sprite->shaderProgram;
-        glUseProgram(shaderProgram->programHandle);
-        
-        CHECK_GL_ERROR();
-        glUniformMatrix4fv(shaderProgram->projectionMatrixUniform, 1, 0, &mProjection[0][0]);
-        CHECK_GL_ERROR();
-        glUniformMatrix4fv(shaderProgram->modelMatrixUniform, 1, 1, &modelMatrix.data[0][0]);
-        
-        CHECK_GL_ERROR();
-        
-        glBindVertexArray(sprite->vertexArrayObject);
-		CHECK_GL_ERROR();
-		
-		if (sprite->texture != 0 || shaderProgram->textureUniform != -1) {
-			assert(sprite->texture != 0 && shaderProgram->textureUniform != -1);
-			glActiveTexture(GL_TEXTURE0);
-			CHECK_GL_ERROR();
-			glBindTexture(GL_TEXTURE_2D, sprite->texture);
-			CHECK_GL_ERROR();
-			glUniform1i(shaderProgram->textureUniform, 0);
-			CHECK_GL_ERROR();
-		}
 
-        if (shaderProgram->alphaUniform != -1)
+    for (auto& renderList : mRenderLists) {
+        for (SpriteGraphic* graphic : renderList)
         {
-            glUniform1f(shaderProgram->alphaUniform, graphic->GetAlpha());
-        }
 
-        glDrawElements(GL_TRIANGLES, sprite->indexCount, GL_UNSIGNED_SHORT, 0);
-        CHECK_GL_ERROR();
+            const Sprite* sprite = graphic->GetSprite();
+            const KEngine2D::Matrix& modelMatrix = graphic->GetTransform()->GetAsMatrix();
+            const ShaderProgram* shaderProgram = sprite->shaderProgram;
+            glUseProgram(shaderProgram->programHandle);
+
+            CHECK_GL_ERROR();
+            glUniformMatrix4fv(shaderProgram->projectionMatrixUniform, 1, 0, &mProjection[0][0]);
+            CHECK_GL_ERROR();
+            glUniformMatrix4fv(shaderProgram->modelMatrixUniform, 1, 1, &modelMatrix.data[0][0]);
+
+            CHECK_GL_ERROR();
+
+            glBindVertexArray(sprite->vertexArrayObject);
+            CHECK_GL_ERROR();
+
+            if (sprite->texture != 0 || shaderProgram->textureUniform != -1) {
+                assert(sprite->texture != 0 && shaderProgram->textureUniform != -1);
+                glActiveTexture(GL_TEXTURE0);
+                CHECK_GL_ERROR();
+                glBindTexture(GL_TEXTURE_2D, sprite->texture);
+                CHECK_GL_ERROR();
+                glUniform1i(shaderProgram->textureUniform, 0);
+                CHECK_GL_ERROR();
+            }
+
+            if (shaderProgram->alphaUniform != -1)
+            {
+                glUniform1f(shaderProgram->alphaUniform, graphic->GetAlpha());
+            }
+
+            glDrawElements(GL_TRIANGLES, sprite->indexCount, GL_UNSIGNED_SHORT, 0);
+            CHECK_GL_ERROR();
+        }
     }
 }
 
 void KEngineOpenGL::SpriteRenderer::AddToRenderList( SpriteGraphic * spriteGraphic )
 {
     assert(mInitialized);
-    mRenderList.push_back(spriteGraphic);
+    mRenderLists[spriteGraphic->GetLayer()].push_back(spriteGraphic);
 }
 
 void KEngineOpenGL::SpriteRenderer::RemoveFromRenderList( SpriteGraphic * spriteGraphic )
 {
     assert(mInitialized);
-    mRenderList.remove(spriteGraphic);
+    mRenderLists[spriteGraphic->GetLayer()].remove(spriteGraphic);
 }
 
 int KEngineOpenGL::SpriteRenderer::GetWidth() const {

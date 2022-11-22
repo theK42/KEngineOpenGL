@@ -63,13 +63,15 @@ namespace KEngineOpenGL
     public:
         SpriteGraphic();
         ~SpriteGraphic();
-        void Init(SpriteRenderer * renderer, Sprite const * sprite, KEngine2D::Transform const * transform);
+        void Init(SpriteRenderer * renderer, Sprite const * sprite, KEngine2D::Transform const * transform, int layer);
         void Deinit();
         Sprite const * GetSprite() const;
         void SetSprite(Sprite const * sprite);
         KEngine2D::Transform const * GetTransform() const;
         float GetAlpha() const;
         void SetAlpha(float alpha);
+
+        int GetLayer();
 
         static const char MetaName[];
    
@@ -78,6 +80,7 @@ namespace KEngineOpenGL
         KEngine2D::Transform const *    mTransform{ nullptr };
         SpriteRenderer*                 mRenderer{ nullptr };
         float                           mAlpha{ 1.0f };
+        int                             mLayer{ 0 };
 
         friend class SpriteLibrary;
     };
@@ -87,7 +90,7 @@ namespace KEngineOpenGL
     public:
         SpriteRenderer();
         ~SpriteRenderer();
-        void Init(int width, int height);
+        void Init(int width, int height, int layers);
         void Deinit();
         void Render() const;
         void AddToRenderList(SpriteGraphic * spriteGraphic);
@@ -96,11 +99,11 @@ namespace KEngineOpenGL
         int GetHeight() const;
     protected:
         
-        std::list<SpriteGraphic *>    mRenderList;
-        bool                          mInitialized{ false };
-        int                           mWidth;
-        int                           mHeight;
-        float                         mProjection[4][4];
+        std::vector<std::list<SpriteGraphic*>>  mRenderLists;
+        bool                                    mInitialized{ false };
+        int                                     mWidth;
+        int                                     mHeight;
+        float                                   mProjection[4][4];
     };
 
     class SpriteLibrary : public KEngineCore::LuaLibrary
