@@ -37,12 +37,14 @@ namespace KEngineOpenGL
         void Init(std::string_view text, const FixWidthBitmapFont& font, const KEngineOpenGL::ShaderProgram* shaderProgram, TextRenderer* renderer);
         void Deinit();
 
+        void Resize(int width, int height);
         void RenderText(std::string_view text, const FixWidthBitmapFont& font);
 
         Sprite& GetSprite();
         const Sprite& GetSprite() const;
         
         const float* GetProjection() const;
+        TextRenderer* GetRenderer() const;
     private:
         Sprite  mSprite;
         GLuint  mFramebuffer{ 0 };
@@ -59,6 +61,8 @@ namespace KEngineOpenGL
         void Deinit();
 
         void RenderText(TextSprite* target, std::string_view text, const FixWidthBitmapFont& font);
+        int GetTextWidth(std::string_view text, const FixWidthBitmapFont& font);
+        int GetTextHeight(std::string_view text, const FixWidthBitmapFont& font);
     private:
 
         void Resize(int newBufferSize);

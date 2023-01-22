@@ -305,3 +305,21 @@ const KEngineCore::LuaWrapping<KEngineOpenGL::SpriteGraphic>& KEngineOpenGL::Spr
 {
     return mSpriteLuaWrapping;
 }
+
+KEngineOpenGL::Sprite::Sprite()
+{
+}
+
+KEngineOpenGL::Sprite::~Sprite()
+{
+    Deinit();
+}
+
+void KEngineOpenGL::Sprite::Init()
+{
+}
+
+void KEngineOpenGL::Sprite::Deinit()
+{
+    //TODO:  release here instead of elsewhere?
+}

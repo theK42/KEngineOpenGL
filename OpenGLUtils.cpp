@@ -76,6 +76,7 @@ void KEngineOpenGL::CheckGLError()
             std::cerr << "CheckGLError -- GL_" << error.c_str() << std::endl;
             errCode = glGetError();
         }
+        assert(false);
         exit(1);
 	}
 }

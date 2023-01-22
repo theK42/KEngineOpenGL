@@ -26,8 +26,38 @@ void KEngineOpenGL::TextSprite::Init(int width, int height, const KEngineOpenGL:
 	glBindFramebuffer(GL_FRAMEBUFFER, mFramebuffer);
 
 	glGenTextures(1, &mSprite.texture);
-	glBindTexture(GL_TEXTURE_2D, mSprite.texture);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+
+
+	glGenBuffers(1, &mSprite.vertexBuffer);
+	glGenBuffers(1, &mSprite.indexBuffer);
+
+	glGenVertexArrays(1, &mSprite.vertexArrayObject);
+	glBindVertexArray(mSprite.vertexArrayObject);
+
+	const GLushort Indices[] = {
+		0, 1, 2,
+		2, 3, 0
+	};
+	/* Bind our first VBO as being the active buffer and storing vertex attributes (coordinates) */
+	glBindBuffer(GL_ARRAY_BUFFER, mSprite.vertexBuffer);
+
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)(sizeof(float) * 3));
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)(sizeof(float) * 7));
+	glEnableVertexAttribArray(2);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mSprite.indexBuffer);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6 * sizeof(GLushort), Indices, GL_STATIC_DRAW);
+
+	glBindVertexArray(0);
+
+	mSprite.shaderProgram = shaderProgram;
+	mSprite.indexCount = 6;
+
+
+	Resize(width, height);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); 
 
@@ -40,10 +70,34 @@ void KEngineOpenGL::TextSprite::Init(int width, int height, const KEngineOpenGL:
 	{
 		CheckGLError();
 	}
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+void KEngineOpenGL::TextSprite::Init(std::string_view text, const FixWidthBitmapFont& font, const KEngineOpenGL::ShaderProgram* shaderProgram, TextRenderer* renderer)
+{
+	int width = font.mGlyphWidth * text.length();
+	int height = font.mGlyphHeight;
+
+	Init(width, height, shaderProgram, renderer);
+	RenderText(text, font);
+}
+
+void KEngineOpenGL::TextSprite::Deinit()
+{
+	glDeleteTextures(1, &mSprite.texture);
+	mSprite.texture = 0;
+	glDeleteFramebuffers(1, &mFramebuffer);
+	mFramebuffer = 0;
+}
+
+void KEngineOpenGL::TextSprite::Resize(int width, int height)
+{
+	glBindTexture(GL_TEXTURE_2D, mSprite.texture);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
 	mSprite.width = width;
 	mSprite.height = height;
 
-	
 	const KEngineOpenGL::Vertex Vertices[] = {
 		{ { (float)width, 0.f, 0.f },{ 1.f, 1.f, 1.f, 1.f },{ 1.f, 0.f } },
 		{ { (float)width, (float)height, 0.f },{ 1.f, 1.f, 1.f, 1.f },{ 1.f,1.f } },
@@ -51,14 +105,8 @@ void KEngineOpenGL::TextSprite::Init(int width, int height, const KEngineOpenGL:
 		{ { 0.f, 0.f, 0.f },{ 1.f, 1.f, 1.f, 1.f },{ 0.f,0.f } }
 	};
 
-	const GLushort Indices[] = {
-		0, 1, 2,
-		2, 3, 0
-	};
-
-	mSprite.vertexArrayObject = KEngineOpenGL::UploadModel(Vertices, 4, Indices, 6);
-	mSprite.shaderProgram = shaderProgram;
-	mSprite.indexCount = 6;
+	glBindBuffer(GL_ARRAY_BUFFER, mSprite.vertexBuffer);
+	glBufferData(GL_ARRAY_BUFFER, 4 * sizeof(KEngineOpenGL::Vertex), Vertices, GL_STATIC_DRAW);
 
 	float left = 0.0f;
 	float right = (float)width;
@@ -86,24 +134,6 @@ void KEngineOpenGL::TextSprite::Init(int width, int height, const KEngineOpenGL:
 	mProjection[3][1] = -(top + bottom) / (top - bottom);
 	mProjection[3][2] = -(far + near) / (far - near);
 	mProjection[3][3] = 1.0f;
-
-}
-
-void KEngineOpenGL::TextSprite::Init(std::string_view text, const FixWidthBitmapFont& font, const KEngineOpenGL::ShaderProgram* shaderProgram, TextRenderer* renderer)
-{
-	int width = font.mGlyphWidth * text.length();
-	int height = font.mGlyphHeight;
-
-	Init(width, height, shaderProgram, renderer);
-	RenderText(text, font);
-}
-
-void KEngineOpenGL::TextSprite::Deinit()
-{
-	glDeleteTextures(1, &mSprite.texture);
-	mSprite.texture = 0;
-	glDeleteFramebuffers(1, &mFramebuffer);
-	mFramebuffer = 0;
 }
 
 void KEngineOpenGL::TextSprite::RenderText(std::string_view text, const FixWidthBitmapFont& font)
@@ -129,6 +159,11 @@ const KEngineOpenGL::Sprite& KEngineOpenGL::TextSprite::GetSprite() const
 const float* KEngineOpenGL::TextSprite::GetProjection() const
 {
 	return &mProjection[0][0];
+}
+
+KEngineOpenGL::TextRenderer* KEngineOpenGL::TextSprite::GetRenderer() const
+{
+	return mTextRenderer;
 }
 
 KEngineOpenGL::TextRenderer::TextRenderer()
@@ -270,4 +305,13 @@ void KEngineOpenGL::TextRenderer::RenderText(TextSprite* target, std::string_vie
 	CHECK_GL_ERROR();
 }
 
+int KEngineOpenGL::TextRenderer::GetTextWidth(std::string_view text, const FixWidthBitmapFont& font)
+{
+	return font.mGlyphWidth * text.length();
+	int height = font.mGlyphHeight;
+}
 
+int KEngineOpenGL::TextRenderer::GetTextHeight(std::string_view text, const FixWidthBitmapFont& font)
+{
+	return font.mGlyphHeight;
+}

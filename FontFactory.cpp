@@ -34,13 +34,7 @@ void KEngineOpenGL::FontFactory::CreateFonts(KEngineCore::DataTree* fontsData)
 
 void KEngineOpenGL::FontFactory::CreateFont(KEngineCore::DataTree* fontData)
 {
-	int mWidth;
-	int mHeight;
-	int mGlyphWidth;
-	int mGlyphHeight;
 	std::string_view glyphs;
-	const ShaderProgram* shaderProgram;
-	GLuint texture;
 
 	FixWidthBitmapFont font;
 	font.texture = mTextureFactory->GetTexture(fontData->GetHash(HASH("texture", 0x82660D72)));

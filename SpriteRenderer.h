@@ -39,11 +39,15 @@ namespace KEngineOpenGL
     
     struct Sprite
     {
+        Sprite();
+        ~Sprite();
+        void Init();
+        void Deinit();
         int width;
         int height;
         const ShaderProgram * shaderProgram;
-        GLint vertexBuffer;
-        GLint indexBuffer;
+        GLuint vertexBuffer;
+        GLuint indexBuffer;
         GLuint vertexArrayObject;
         int indexCount;
 		GLuint texture;
