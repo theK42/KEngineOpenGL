@@ -92,7 +92,7 @@ void KEngineOpenGL::DeleteBuffer(GLuint bufferId)
 }
 
 
-
+#ifndef NOT_GLAD
 void KEngineOpenGL::InitializeGlad(GLADloadproc loadProc)
 {
     if (loadProc) {
@@ -102,3 +102,4 @@ void KEngineOpenGL::InitializeGlad(GLADloadproc loadProc)
         gladLoadGL();
     }
 }
+#endif //NOT_GLAD

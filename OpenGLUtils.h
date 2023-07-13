@@ -11,7 +11,8 @@
 #if __APPLE__
     #include "TargetConditionals.h"
     #if TARGET_OS_IPHONE
-        #include <OpenGLES/gltypes.h>
+        #define NOT_GLAD
+        #include <OpenGLES/ES3/gl.h>
     #else
         #include "glad/glad.h"
     #endif
@@ -39,8 +40,9 @@ namespace KEngineOpenGL {
 
     void DeleteVAO(GLuint vaoId);
     void DeleteBuffer(GLuint bufferId);
-
+#ifndef NOT_GLAD
 	void InitializeGlad(GLADloadproc loadProc);
+#endif //NOT_GLAD
     
     
 }
