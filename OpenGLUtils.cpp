@@ -91,6 +91,20 @@ void KEngineOpenGL::DeleteBuffer(GLuint bufferId)
     glDeleteBuffers(1, &bufferId);
 }
 
+static std::vector<GLint> framebufferStack;
+
+void KEngineOpenGL::PushFramebuffer(GLint bufferId)
+{
+    glBindFramebuffer(GL_FRAMEBUFFER, bufferId);
+    framebufferStack.push_back(bufferId);
+}
+
+void KEngineOpenGL::PopFramebuffer()
+{
+    framebufferStack.pop_back();
+    glBindFramebuffer(GL_FRAMEBUFFER, framebufferStack.back());
+}
+
 
 #ifndef NOT_GLAD
 void KEngineOpenGL::InitializeGlad(GLADloadproc loadProc)

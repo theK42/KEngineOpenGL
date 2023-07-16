@@ -23,7 +23,7 @@ void KEngineOpenGL::TextSprite::Init(int width, int height, const KEngineOpenGL:
 	assert(mFramebuffer == 0);
 	mTextRenderer = renderer;
 	glGenFramebuffers(1, &mFramebuffer);
-	glBindFramebuffer(GL_FRAMEBUFFER, mFramebuffer);
+    PushFramebuffer(mFramebuffer);
 
 	glGenTextures(1, &mSprite.texture);
 
@@ -71,7 +71,7 @@ void KEngineOpenGL::TextSprite::Init(int width, int height, const KEngineOpenGL:
 		CheckGLError();
 	}
 
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	PopFramebuffer();
 }
 
 void KEngineOpenGL::TextSprite::Init(std::string_view text, const FixWidthBitmapFont& font, const KEngineOpenGL::ShaderProgram* shaderProgram, TextRenderer* renderer)
@@ -138,11 +138,11 @@ void KEngineOpenGL::TextSprite::Resize(int width, int height)
 
 void KEngineOpenGL::TextSprite::RenderText(std::string_view text, const FixWidthBitmapFont& font)
 {
-	glBindFramebuffer(GL_FRAMEBUFFER, mFramebuffer);
+	PushFramebuffer(mFramebuffer);
 	glViewport(0, 0, mSprite.width, mSprite.height);
 
 	mTextRenderer->RenderText(this, text, font);
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	PopFramebuffer();
 
 }
 

@@ -13,6 +13,7 @@
     #if TARGET_OS_IPHONE
         #define NOT_GLAD
         #include <OpenGLES/ES3/gl.h>
+        #define GLES_SILENCE_DEPRECATION 1
     #else
         #include "glad/glad.h"
     #endif
@@ -40,6 +41,9 @@ namespace KEngineOpenGL {
 
     void DeleteVAO(GLuint vaoId);
     void DeleteBuffer(GLuint bufferId);
+
+    void PushFramebuffer(GLint bufferId);
+    void PopFramebuffer();
 #ifndef NOT_GLAD
 	void InitializeGlad(GLADloadproc loadProc);
 #endif //NOT_GLAD
