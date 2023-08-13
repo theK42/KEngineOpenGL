@@ -8,6 +8,7 @@
 #include "OpenGLUtils.h"
 #include <assert.h>
 #include <iostream>
+#include <vector>
 
 GLuint KEngineOpenGL::UploadModel(const KEngineOpenGL::Vertex* vertices, int numVertices, const GLushort *indices, int numIndices)
 {
