@@ -23,6 +23,8 @@ add_subdirectory(glad)
 
 if (${CMAKE_SYSTEM_NAME} MATCHES "iOS")
 	target_link_libraries(KEngineOpenGL PUBLIC glad)
+elseif(${CMAKE_SYSTEM_NAME} MATCHES "Android")
+	target_link_libraries(KEngineOpenGL PUBLIC glad EGL GLESv3)
 else()
 	find_package(OpenGL REQUIRED)
 	target_link_libraries(KEngineOpenGL PUBLIC glad ${OPENGL_LIBRARIES})
